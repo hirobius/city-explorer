@@ -22,8 +22,7 @@ class App extends React.Component {
 
   handleSearch = async (citySearchedFor) => {
     console.log('searched', citySearchedFor);
-    const accessKey = 'pk.147c380296b5e463e0f911244af73a5e';
-    let locationResponseData = await axios.get(`https://us1.locationiq.com/v1/search.php?key=${accessKey}&q=${citySearchedFor}&format=json`);
+    let locationResponseData = await axios.get(`https://us1.locationiq.com/v1/search.php?key=${process.env.REACT_APP_LOCATIONIQ_ACCESSKEY}&q=${citySearchedFor}&format=json`);
     console.log(locationResponseData);
     this.setState({
       haveWeSearchedYet: true,
@@ -31,7 +30,6 @@ class App extends React.Component {
       locationData: locationResponseData.data[0]
     });
   }
-
 
   render() {
     return (

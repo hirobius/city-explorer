@@ -1,16 +1,17 @@
 import React from 'react';
 import axios from 'axios';
-
+import './App.css';
+import Form from 'react-bootstrap/Form';
 import City from './City.js';
 import Search from './Search.js';
-
-import './App.css';
+import Button from 'react-bootstrap/Button';
 
 class App extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
+      city: '',
       haveWeSearchedYet: false,
       citySearchedFor: '',
     };
@@ -35,6 +36,15 @@ class App extends React.Component {
     return (
       <>
         <h1>City Explorer</h1>
+        <Form>
+          <Form.Group controlId="City">
+            <Form.Label>City name</Form.Label>
+            <Form.Control value={this.state.city} onInput={e => this.setState({city: e.target.value})}></Form.Control>
+          </Form.Group>
+          <Button variant="primary" type="submit">
+            Explore!
+          </Button>
+        </Form>
         {this.state.haveWeSearchedYet ?
           <City handleShowSearch={this.handleShowSearch} cityData={this.state.locationData} /> :
           <Search handleSearch={this.handleSearch} />}

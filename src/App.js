@@ -35,7 +35,7 @@ class App extends React.Component {
   }
 
   handleButtonClickWeather = async () => {
-    let weatherData = await axios.get('http://localhost:3001/weather');
+    let weatherData = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/weather`);
     console.log(weatherData);
     this.setState({
       data: weatherData.data

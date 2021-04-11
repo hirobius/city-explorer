@@ -34,14 +34,27 @@ class App extends React.Component {
     });
   }
 
+  handleButtonClickWeather = async () => {
+    let weatherData = await axios.get('http://localhost:3001/weather');
+    console.log(weatherData);
+    this.setState({
+      data: weatherData.data
+    });
+  }
+
   handleFormSubmit = async (event) => {
     event.preventDefault();
     console.log(this.state.city);
-    let cityData = await axios.get(`https://us1.locationiq.com/v1/search.php?key=${process.env.REACT_APP_LOCATIONIQ_ACCESSKEY}&q=${this.state.city}&format=json`);
-    let cityNeeded = cityData.data[0];
-    this.setState({
-      cityData: cityNeeded
-    })
+    try {
+      let cityData = await axios.get(`https://us1.locationiq.com/v1/search.php?key=${process.env.REACT_APP_LOCATIONIQ_ACCESSKEY}&q=${this.state.city}&format=json`);
+      let cityNeeded = cityData.data[0];
+      this.setState({
+        cityData: cityNeeded
+      });
+    } catch (err) {
+      console.log(err);
+      this.setState({ error: `${err.message}: ${err.response.data.error}` });
+    }
   }
 
   render() {
@@ -51,16 +64,25 @@ class App extends React.Component {
         <Form onSubmit={this.handleFormSubmit}>
           <Form.Group controlId="City">
             <Form.Label>City name</Form.Label>
-            <Form.Control value={this.state.city} onInput={e => this.setState({city: e.target.value})}></Form.Control>
+            <Form.Control value={this.state.city} onInput={e => this.setState({ city: e.target.value })}></Form.Control>
           </Form.Group>
           <Button variant="primary" type="submit">
             Explore!
           </Button>
         </Form>
+        {this.state.error ? <h3>{this.state.error}</h3> : ''}
         {this.state.cityData.lat !== undefined ? <Jumbotron>
           <h3>{this.state.cityData.display_name}</h3>
           <h5>{this.state.cityData.lat}, {this.state.cityData.lon}</h5>
+          <img src={`https://maps.locationiq.com/v3/staticmap?key=${process.env.REACT_APP_LOCATIONIQ_ACCESSKEY}&center=${this.state.cityData.lat},${this.state.cityData.lon}&zoom=10`} alt={`Map of ${this.state.cityData.display_name}`} />
         </Jumbotron> : ''}
+        <Button variant="primary" onClick={this.handleButtonClickWeather}>What's the weather like??</Button>
+        {this.state.data ? (
+          <ul>
+            {/* {this.state.data.data.map( item => (<li key={item}>{item}</li>))} */}
+            <li>Here is where Data should render aka {this.state.data.data.map( item => (<li key={item}>{item}</li>))}</li>
+          </ul>
+        ) : ''}
         {/* {this.state.haveWeSearchedYet ?
           <City handleShowSearch={this.handleShowSearch} cityData={this.state.locationData} /> :
           <Search handleSearch={this.handleSearch} />} */}

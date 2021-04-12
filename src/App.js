@@ -59,7 +59,6 @@ class App extends React.Component {
               <h6>{this.state.cityData.lat}, {this.state.cityData.lon}</h6>
               <img src={`https://maps.locationiq.com/v3/staticmap?key=${process.env.REACT_APP_LOCATIONIQ_ACCESSKEY}&center=${this.state.cityData.lat},${this.state.cityData.lon}&zoom=10`} alt={`Map of ${this.state.cityData.display_name}`} />
             </Jumbotron>
-            {/* beginnings of passing props in the function weatherTestData above */}
             <Weather weatherData={this.state.data} />
             {console.log(this.state.data)}
           </>

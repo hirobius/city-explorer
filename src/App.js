@@ -34,21 +34,9 @@ class App extends React.Component {
       });
     } catch (err) {
       console.log(err);
-      this.setState({ error: `${err.message}: ${err.response.data.error}` });
+      this.setState({ error: `${err.message}: ${err.message.data}` });
     }
   }
-
-  // weatherTestData = (beasts) => {
-  //   this.setState({ allBeasts: beasts });
-  // }
-
-  // handleButtonClickWeather = async () => {
-  //   let weatherData = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/weather`);
-  //   console.log(weatherData);
-  //   this.setState({
-  //     data: weatherData.data
-  //   });
-  // }
 
   render() {
     return (
@@ -72,16 +60,17 @@ class App extends React.Component {
               <img src={`https://maps.locationiq.com/v3/staticmap?key=${process.env.REACT_APP_LOCATIONIQ_ACCESSKEY}&center=${this.state.cityData.lat},${this.state.cityData.lon}&zoom=10`} alt={`Map of ${this.state.cityData.display_name}`} />
             </Jumbotron>
             {/* beginnings of passing props in the function weatherTestData above */}
-            <Weather weatherTestData={this.weatherTestData} />
+            <Weather weatherData={this.state.data} />
+            {console.log(this.state.data)}
           </>
           : ''}
 
           {/* move the below to the Weather component */}
-        {this.state.data ? (
+        {/* {this.state.data ? (
           <ul>
-            <li>{this.state.data.data.map(item => (<li key={item}>Snow_depth: {item.snow_depth}, Clouds: {item.clouds}</li>))}</li>
+            <li>{this.state.data.map(item => (<li key={item}>Snow_depth: {item.snow_depth}, Clouds: {item.clouds}</li>))}</li>
           </ul>
-        ) : ''}
+        ) : ''} */}
       </>
     );
   }

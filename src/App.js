@@ -25,8 +25,7 @@ class App extends React.Component {
     event.preventDefault();
     console.log(this.state.city);
     try {
-      let cityData = await axios.get(`https://us1.locationiq.com/v1/search.php?key=${process.env.
-        REACT_APP_LOCATIONIQ_ACCESSKEY}&q=${this.state.city}&format=json`);
+      let cityData = await axios.get(`https://us1.locationiq.com/v1/search.php?key=${process.env.REACT_APP_LOCATIONIQ_ACCESSKEY}&q=${this.state.city}&format=json`);
       let weatherData = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/weather`);
       let cityNeeded = cityData.data[0];
       this.setState({

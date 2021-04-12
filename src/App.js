@@ -2,10 +2,9 @@ import React from 'react';
 import axios from 'axios';
 import './App.css';
 import Form from 'react-bootstrap/Form';
-// import City from './City.js';
-// import Search from './Search.js';
 import Button from 'react-bootstrap/Button';
 import Jumbotron from 'react-bootstrap/Jumbotron'
+import Weather from './Weather';
 
 class App extends React.Component {
   constructor(props) {
@@ -14,7 +13,6 @@ class App extends React.Component {
     this.state = {
       city: '',
       cityData: {},
-      haveWeSearchedYet: false,
       citySearchedFor: '',
     };
   }
@@ -23,39 +21,35 @@ class App extends React.Component {
     this.setState({ haveWeSearchedYet: false });
   }
 
-  handleSearch = async (citySearchedFor) => {
-    console.log('searched', citySearchedFor);
-    let locationResponseData = await axios.get(`https://us1.locationiq.com/v1/search.php?key=${process.env.REACT_APP_LOCATIONIQ_ACCESSKEY}&q=${citySearchedFor}&format=json`);
-    console.log(locationResponseData);
-    this.setState({
-      haveWeSearchedYet: true,
-      citySearchedFor: citySearchedFor,
-      locationData: locationResponseData.data[0]
-    });
-  }
-
-  handleButtonClickWeather = async () => {
-    let weatherData = await axios.get('http://localhost:3001/weather');
-    console.log(weatherData);
-    this.setState({
-      data: weatherData.data
-    });
-  }
-
   handleFormSubmit = async (event) => {
     event.preventDefault();
     console.log(this.state.city);
     try {
-      let cityData = await axios.get(`https://us1.locationiq.com/v1/search.php?key=${process.env.REACT_APP_LOCATIONIQ_ACCESSKEY}&q=${this.state.city}&format=json`);
+      let cityData = await axios.get(`https://us1.locationiq.com/v1/search.php?key=${process.env.
+        REACT_APP_LOCATIONIQ_ACCESSKEY}&q=${this.state.city}&format=json`);
+      let weatherData = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/weather`);
       let cityNeeded = cityData.data[0];
       this.setState({
-        cityData: cityNeeded
+        cityData: cityNeeded,
+        data: weatherData.data
       });
     } catch (err) {
       console.log(err);
       this.setState({ error: `${err.message}: ${err.response.data.error}` });
     }
   }
+
+  // weatherTestData = (beasts) => {
+  //   this.setState({ allBeasts: beasts });
+  // }
+
+  // handleButtonClickWeather = async () => {
+  //   let weatherData = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/weather`);
+  //   console.log(weatherData);
+  //   this.setState({
+  //     data: weatherData.data
+  //   });
+  // }
 
   render() {
     return (
@@ -71,21 +65,24 @@ class App extends React.Component {
           </Button>
         </Form>
         {this.state.error ? <h3>{this.state.error}</h3> : ''}
-        {this.state.cityData.lat !== undefined ? <Jumbotron>
-          <h3>{this.state.cityData.display_name}</h3>
-          <h5>{this.state.cityData.lat}, {this.state.cityData.lon}</h5>
-          <img src={`https://maps.locationiq.com/v3/staticmap?key=${process.env.REACT_APP_LOCATIONIQ_ACCESSKEY}&center=${this.state.cityData.lat},${this.state.cityData.lon}&zoom=10`} alt={`Map of ${this.state.cityData.display_name}`} />
-        </Jumbotron> : ''}
-        <Button variant="primary" onClick={this.handleButtonClickWeather}>What's the weather like??</Button>
+        {this.state.cityData.lat !== undefined ?
+          <>
+            <Jumbotron>
+              <h3>{this.state.cityData.display_name}</h3>
+              <h6>{this.state.cityData.lat}, {this.state.cityData.lon}</h6>
+              <img src={`https://maps.locationiq.com/v3/staticmap?key=${process.env.REACT_APP_LOCATIONIQ_ACCESSKEY}&center=${this.state.cityData.lat},${this.state.cityData.lon}&zoom=10`} alt={`Map of ${this.state.cityData.display_name}`} />
+            </Jumbotron>
+            {/* beginnings of passing props in the function weatherTestData above */}
+            <Weather weatherTestData={this.weatherTestData} />
+          </>
+          : ''}
+
+          {/* move the below to the Weather component */}
         {this.state.data ? (
           <ul>
-            {/* {this.state.data.data.map( item => (<li key={item}>{item}</li>))} */}
-            <li>Here is where Data should render aka {this.state.data.data.map( item => (<li key={item}>{item}</li>))}</li>
+            <li>{this.state.data.data.map(item => (<li key={item}>Snow_depth: {item.snow_depth}, Clouds: {item.clouds}</li>))}</li>
           </ul>
         ) : ''}
-        {/* {this.state.haveWeSearchedYet ?
-          <City handleShowSearch={this.handleShowSearch} cityData={this.state.locationData} /> :
-          <Search handleSearch={this.handleSearch} />} */}
       </>
     );
   }

@@ -64,13 +64,6 @@ class App extends React.Component {
             {console.log(this.state.data)}
           </>
           : ''}
-
-          {/* move the below to the Weather component */}
-        {/* {this.state.data ? (
-          <ul>
-            <li>{this.state.data.map(item => (<li key={item}>Snow_depth: {item.snow_depth}, Clouds: {item.clouds}</li>))}</li>
-          </ul>
-        ) : ''} */}
       </>
     );
   }

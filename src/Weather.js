@@ -10,11 +10,14 @@ class Weather extends React.Component {
   render() {
     return (
       <>
-      {this.state.data ? (
+        <h1>Hello!</h1>
+        <h3>{this.props.weatherData[0].date}</h3>
+        {this.props.weatherData ? (
           <ul>
-            <li>{this.state.data.data.map(item => (<li key={item}>Snow_depth: {item.snow_depth}, Clouds: {item.clouds}</li>))}</li>
+            {this.props.weatherData.map(item => (<li key={item}>Date: {item.date}, Description: {item.description}</li>))}
           </ul>
         ) : ''}
+        {console.log(this.props.weatherData[0].date)}
       </>
     );
   }

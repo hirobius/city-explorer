@@ -14,6 +14,7 @@ class App extends React.Component {
       city: '',
       cityData: {},
       citySearchedFor: '',
+      weatherData: []
     };
   }
 
@@ -38,6 +39,19 @@ class App extends React.Component {
     }
   }
 
+  getWeatherData = async () => {
+    try {
+      const weatherData = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/weather`);
+      console.log('this works', weatherData);
+      this.setState({
+        weatherData: weatherData.data
+      })
+      console.log(this.state);
+    } catch (error) {
+      console.log(`error found!!! ${error.message}`);
+    }
+  }
+
   render() {
     return (
       <>
@@ -59,7 +73,6 @@ class App extends React.Component {
               <h6>{this.state.cityData.lat}, {this.state.cityData.lon}</h6>
               <img src={`https://maps.locationiq.com/v3/staticmap?key=${process.env.REACT_APP_LOCATIONIQ_ACCESSKEY}&center=${this.state.cityData.lat},${this.state.cityData.lon}&zoom=10`} alt={`Map of ${this.state.cityData.display_name}`} />
             </Jumbotron>
-            {/* beginnings of passing props in the function weatherTestData above */}
             <Weather weatherData={this.state.data} />
             {console.log(this.state.data)}
           </>

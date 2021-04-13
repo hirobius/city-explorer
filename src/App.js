@@ -14,6 +14,7 @@ class App extends React.Component {
       city: '',
       cityData: {},
       citySearchedFor: '',
+      weatherData: []
     };
   }
 
@@ -35,6 +36,19 @@ class App extends React.Component {
     } catch (err) {
       console.log(err);
       this.setState({ error: `${err.message}: ${err.message.data}` });
+    }
+  }
+
+  getWeatherData = async () => {
+    try {
+      const weatherData = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/weather`);
+      console.log('this works', weatherData);
+      this.setState({
+        weatherData: weatherData.data
+      })
+      console.log(this.state);
+    } catch (error) {
+      console.log(`error found!!! ${error.message}`);
     }
   }
 

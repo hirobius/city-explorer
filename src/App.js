@@ -27,6 +27,8 @@ class App extends React.Component {
   // register variable to the deployed heroku + netlify
   // build the weatherCallback
 
+  // tune in to 7:09 of the recording for some hot tipson all of this in the FRONT END
+
   // Argentina as example: https://api.weatherbit.io/v2.0/current?lat=-34.9964963&lon=-64.9672817&callback=weatherCallback&key=c0cbcbc8e94548eb8fb2585b42b823f4
 
   // handleShowSearch = () => {

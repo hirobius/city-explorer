@@ -21,7 +21,7 @@ class App extends React.Component {
   }
 
   // weather API work
-  // hmm.....
+  
   // build this in Weather.js
   // store the lat and lon upon form submit
   // hide key in a variable

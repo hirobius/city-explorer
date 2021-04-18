@@ -15,6 +15,7 @@ class App extends React.Component {
       cityData: {},
       citySearchedFor: '',
       weatherData: [],
+      cityTarget: {}
     };
   }
 
@@ -26,11 +27,13 @@ class App extends React.Component {
       let cityData = await axios.get(`https://us1.locationiq.com/v1/search.php?key=${process.env.REACT_APP_LOCATIONIQ_ACCESSKEY}&q=${this.state.city}&format=json`);
       let cityTarget = cityData.data[0];
       this.setState({
-        city: cityTarget.display_name,
+        cityName: cityTarget.display_name,
         lat: cityTarget.lat,
         lon: cityTarget.lon,
+        date: cityTarget.date
       });
       this.getWeatherData(cityTarget.lat, cityTarget.lon);
+      // console.log(this.state);
     } catch (err) {
       console.log(err);
       this.setState({ error: `${err.message}: ${err.message.data}` });
@@ -68,17 +71,18 @@ class App extends React.Component {
           </Button>
         </Form>
         {this.state.error ? <h3>{this.state.error}</h3> : ''}
-        {this.state.cityData.lat !== undefined ?
+        {this.state.cityData.lat === undefined ?
           <>
+            <h2>{this.state.cityData.lat}Hello</h2>
             <Jumbotron>
               <h3>{this.state.cityData.display_name}</h3>
               <h6>{this.state.cityData.lat}, {this.state.cityData.lon}</h6>
-              <img src={`https://maps.locationiq.com/v3/staticmap?key=${process.env.REACT_APP_LOCATIONIQ_ACCESSKEY}&center=${this.state.cityData.lat},${this.state.cityData.lon}&zoom=10`} alt={`Map of ${this.state.city}`} />
+              <img src={`https://maps.locationiq.com/v3/staticmap?key=${process.env.REACT_APP_LOCATIONIQ_ACCESSKEY}&center=${this.state.lat},${this.state.lon}&zoom=10`} alt={`Map of ${this.state.cityName}`} />
             </Jumbotron>
-            <Weather weatherData={this.state.data} />
+            <Weather cityTarget={this.state.cityTarget} />
             {/* {console.log(this.state.data)} */}
           </>
-          : ''}
+          : console.log(`dang`)}
       </>
     );
   }

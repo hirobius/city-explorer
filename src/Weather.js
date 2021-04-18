@@ -9,15 +9,17 @@ class Weather extends React.Component {
   }
 
   render() {
-    let allListGroups = this.props.weatherData.map((day, index) =>
-        <ListGroup.Item key={index}>Description: {day.description}, Date: {day.date}</ListGroup.Item>);
-      
+    // let allListGroups = this.props.weatherData.map((day, index) =>
+    //     <ListGroup.Item key={index}>Description: {day.description}, Date: {day.date}</ListGroup.Item>);
+
     return (
       <>
         <h1>Weather for:</h1>
-        <h3>{this.props.weatherData[0].date}</h3>
         <ListGroup>
-          {allListGroups}
+
+          <h3>{this.props.cityTarget.date}</h3>
+          <h1>Weather for:</h1>
+          {/* {allListGroups} */}
         </ListGroup>
         {/* {console.log(this.props.weatherData[0].date)} */}
       </>

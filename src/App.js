@@ -15,8 +15,6 @@ class App extends React.Component {
       cityData: {},
       citySearchedFor: '',
       weatherData: [],
-      // imagesToRender: [],
-      // searchSuccess: false,
     };
   }
 
@@ -30,27 +28,12 @@ class App extends React.Component {
 
   // tune in to 7:09 of the recording for some hot tipson all of this in the FRONT END
 
-  // Argentina as example: https://api.weatherbit.io/v2.0/current?lat=-34.9964963&lon=-64.9672817&callback=weatherCallback&key=c0cbcbc8e94548eb8fb2585b42b823f4
 
-  // handleShowSearch = () => {
-  //   this.setState({ haveWeSearchedYet: false });
-  // }
-
-  changeToRealData = async () => {
-    try {
-      let realWeather = await axios.get(`$https://api.weatherbit.io/v2.0/current?lat=${this.state.cityData.lat}&lon=${this.state.cityData.lon}&key=${process.env.REACT_APP_WEATHER_API_KEY}/weather}`);
-      console.log(realWeather);
-    } catch (err) {
-      console.log(err);
-      this.setState({ error: `${err.message}: ${err.message.data}` });
-    }
-  }
-
+  // location IQ Key here
   handleFormSubmit = async (event) => {
     event.preventDefault();
     console.log(this.state.city);
     this.getWeatherData();
-    this.changeToRealData();
     try {
       let cityData = await axios.get(`https://us1.locationiq.com/v1/search.php?key=${process.env.REACT_APP_LOCATIONIQ_ACCESSKEY}&q=${this.state.city}&format=json`);
       let weatherData = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/weather`);
@@ -66,10 +49,11 @@ class App extends React.Component {
     }
   }
 
+  // backend referenced
   getWeatherData = async () => {
     try {
       const weatherData = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/weather`);
-      console.log('this works', weatherData);
+      // console.log('this works', weatherData);  
       this.setState({
         weatherData: weatherData.data
       })
@@ -79,31 +63,7 @@ class App extends React.Component {
     }
   }
 
-
-  // getImages = (e) => {
-  //   e.preventDefault();
-  //   console.log(this.state.imageSearch);
-  //   axios.get('http://localhost:3001/images', // add the process.env.REACT BACKEND URL
-  //     {
-  //       params: {
-  //         imageSearch: this.state.imageSearch,
-  //       }
-  //     })
-  //     .then(images => {
-  //       console.log(images);
-  //       this.setState({
-  //         imagesToRender: images.data,
-  //         searchSucces: true,
-  //       })
-  //     })
-  //     .catch(err => {
-  //       console.error(err);
-  //     })
-  // }
-
-
   render() {
-    // let allCarouselItems = this.state.imagesToRender.map((img, index) => <img src={img.url} alt={img.alt} />);
 
     return (
       <>
@@ -129,13 +89,6 @@ class App extends React.Component {
             {console.log(this.state.data)}
           </>
           : ''}
-        {/* <h1>Images Lab</h1>
-        <form onSubmit={this.getImages}>
-          <label>What would you like to see?
-          <input onChange={e => this.setState({ imageSearch: e.target.value })} />
-          </label>
-          <input type="submit" />
-        </form> */}
       </>
     );
   }

@@ -18,31 +18,19 @@ class App extends React.Component {
     };
   }
 
-  // weather API work
-  
-  // build this in Weather.js
-  // store the lat and lon upon form submit
-  // hide key in a variable
-  // register variable to the deployed heroku + netlify
-  // build the weatherCallback
-
-  // tune in to 7:09 of the recording for some hot tipson all of this in the FRONT END
-
-
   // location IQ Key here
   handleFormSubmit = async (event) => {
     event.preventDefault();
-    console.log(this.state.city);
-    this.getWeatherData();
+    // console.log(this.state.city);
     try {
       let cityData = await axios.get(`https://us1.locationiq.com/v1/search.php?key=${process.env.REACT_APP_LOCATIONIQ_ACCESSKEY}&q=${this.state.city}&format=json`);
-      let weatherData = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/weather`);
-      let cityNeeded = cityData.data[0];
+      let cityTarget = cityData.data[0];
       this.setState({
-        cityData: cityNeeded,
-        data: weatherData.data
+        city: cityTarget.display_name,
+        lat: cityTarget.lat,
+        lon: cityTarget.lon,
       });
-
+      this.getWeatherData(cityTarget.lat, cityTarget.lon);
     } catch (err) {
       console.log(err);
       this.setState({ error: `${err.message}: ${err.message.data}` });
@@ -50,16 +38,18 @@ class App extends React.Component {
   }
 
   // backend referenced
-  getWeatherData = async () => {
+  getWeatherData = async (lat, lon) => {
     try {
-      const weatherData = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/weather`);
-      // console.log('this works', weatherData);  
-      this.setState({
-        weatherData: weatherData.data
-      })
-      // console.log(this.state);
-    } catch (error) {
-      console.log(`error found!!! ${error.message}`);
+      let weatherData = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/weather`, {
+        params: {
+          lat: lat,
+          lon: lon
+        }
+      });
+      console.log('this works', weatherData);
+    } catch (err) {
+      console.log(`error found!!! ${err.message}`);
+      this.setState({ error: `${err.message}: ${err.message.data}` });
     }
   }
 
@@ -83,10 +73,10 @@ class App extends React.Component {
             <Jumbotron>
               <h3>{this.state.cityData.display_name}</h3>
               <h6>{this.state.cityData.lat}, {this.state.cityData.lon}</h6>
-              <img src={`https://maps.locationiq.com/v3/staticmap?key=${process.env.REACT_APP_LOCATIONIQ_ACCESSKEY}&center=${this.state.cityData.lat},${this.state.cityData.lon}&zoom=10`} alt={`Map of ${this.state.cityData.display_name}`} />
+              <img src={`https://maps.locationiq.com/v3/staticmap?key=${process.env.REACT_APP_LOCATIONIQ_ACCESSKEY}&center=${this.state.cityData.lat},${this.state.cityData.lon}&zoom=10`} alt={`Map of ${this.state.city}`} />
             </Jumbotron>
             <Weather weatherData={this.state.data} />
-            {console.log(this.state.data)}
+            {/* {console.log(this.state.data)} */}
           </>
           : ''}
       </>

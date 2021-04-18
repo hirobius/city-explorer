@@ -13,16 +13,13 @@ class App extends React.Component {
     this.state = {
       city: '',
       cityData: {},
-      citySearchedFor: '',
       weatherData: [],
-      cityTarget: {}
+      cityTarget: []
     };
   }
 
-  // location IQ Key here
   handleFormSubmit = async (event) => {
     event.preventDefault();
-    // console.log(this.state.city);
     try {
       let cityData = await axios.get(`https://us1.locationiq.com/v1/search.php?key=${process.env.REACT_APP_LOCATIONIQ_ACCESSKEY}&q=${this.state.city}&format=json`);
       let cityTarget = cityData.data[0];
@@ -30,17 +27,15 @@ class App extends React.Component {
         cityName: cityTarget.display_name,
         lat: cityTarget.lat,
         lon: cityTarget.lon,
-        date: cityTarget.date
       });
       this.getWeatherData(cityTarget.lat, cityTarget.lon);
-      // console.log(this.state);
+      console.log(this.state);
     } catch (err) {
       console.log(err);
       this.setState({ error: `${err.message}: ${err.message.data}` });
     }
   }
-
-  // backend referenced
+  
   getWeatherData = async (lat, lon) => {
     try {
       let weatherData = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/weather`, {
@@ -73,14 +68,13 @@ class App extends React.Component {
         {this.state.error ? <h3>{this.state.error}</h3> : ''}
         {this.state.cityData.lat === undefined ?
           <>
-            <h2>{this.state.cityData.lat}Hello</h2>
             <Jumbotron>
-              <h3>{this.state.cityData.display_name}</h3>
-              <h6>{this.state.cityData.lat}, {this.state.cityData.lon}</h6>
+              <h3>{this.state.cityName}</h3>
+              <h6>{this.state.lat} {this.state.lon}</h6>
               <img src={`https://maps.locationiq.com/v3/staticmap?key=${process.env.REACT_APP_LOCATIONIQ_ACCESSKEY}&center=${this.state.lat},${this.state.lon}&zoom=10`} alt={`Map of ${this.state.cityName}`} />
             </Jumbotron>
-            <Weather cityTarget={this.state.cityTarget} />
-            {/* {console.log(this.state.data)} */}
+            <Weather weatherData={this.state.weatherData}/>
+            {console.log(this.state.cityTarget)}
           </>
           : console.log(`dang`)}
       </>

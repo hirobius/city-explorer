@@ -10,18 +10,25 @@ class Weather extends React.Component {
 
   render() {
     // let allListGroups = this.props.weatherData.map((day, index) =>
-    //     <ListGroup.Item key={index}>Description: {day.description}, Date: {day.date}</ListGroup.Item>);
+    //   <ListGroup.Item key={index}>Description: {day.description}, Date: {day.date}</ListGroup.Item>);
+
+    // async function allListGroups(day, index) {
+    //   try {
+    //     this.props.weatherData.map((day, index) =>
+    //       <ListGroup.Item key={index}>Description: {day.description}, Date: {day.date}</ListGroup.Item>);
+    //   } catch (err) {
+    //     console.log(`error found!!! ${err.message}`);
+    //     this.setState({ error: `${err.message}: ${err.message.data}` });
+    //   }
+    // }
+    // ;
 
     return (
       <>
-        <h1>Weather for:</h1>
         <ListGroup>
-
-          <h3>{this.props.cityTarget.date}</h3>
-          <h1>Weather for:</h1>
+          <ListGroup.Item key={'1'}>Description: {this.props.weatherData.status}, Date: {this.props.weatherData.datetime}</ListGroup.Item>);
           {/* {allListGroups} */}
         </ListGroup>
-        {/* {console.log(this.props.weatherData[0].date)} */}
       </>
     );
   }

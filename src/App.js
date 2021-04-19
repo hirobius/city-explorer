@@ -5,6 +5,7 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Jumbotron from 'react-bootstrap/Jumbotron'
 import Weather from './Weather';
+import Container from 'react-bootstrap/Container';
 
 class App extends React.Component {
   constructor(props) {
@@ -14,7 +15,7 @@ class App extends React.Component {
       city: '',
       cityData: {},
       weatherData: [],
-      cityTarget: []
+      // cityTarget: []
     };
   }
 
@@ -24,27 +25,30 @@ class App extends React.Component {
       let cityData = await axios.get(`https://us1.locationiq.com/v1/search.php?key=${process.env.REACT_APP_LOCATIONIQ_ACCESSKEY}&q=${this.state.city}&format=json`);
       let cityTarget = cityData.data[0];
       this.setState({
-        cityName: cityTarget.display_name,
+        cityName: cityData.data[0].display_name,
         lat: cityTarget.lat,
         lon: cityTarget.lon,
       });
       this.getWeatherData(cityTarget.lat, cityTarget.lon);
-      console.log(this.state);
+      // console.log(this.state);
     } catch (err) {
       console.log(err);
       this.setState({ error: `${err.message}: ${err.message.data}` });
     }
   }
-  
-  getWeatherData = async (lat, lon) => {
+
+  getWeatherData = async () => {
     try {
       let weatherData = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/weather`, {
         params: {
-          lat: lat,
-          lon: lon
+          lat: this.state.lat,
+          lon: this.state.lon
         }
       });
-      console.log('this works', weatherData);
+      // console.log('this works', weatherData);
+      this.setState({
+        weatherData: weatherData.data
+      })
     } catch (err) {
       console.log(`error found!!! ${err.message}`);
       this.setState({ error: `${err.message}: ${err.message.data}` });
@@ -55,28 +59,30 @@ class App extends React.Component {
 
     return (
       <>
-        <h1>City Explorer</h1>
-        <Form onSubmit={this.handleFormSubmit}>
-          <Form.Group controlId="City">
-            <Form.Label>City name</Form.Label>
-            <Form.Control value={this.state.city} onInput={e => this.setState({ city: e.target.value })}></Form.Control>
-          </Form.Group>
-          <Button variant="primary" type="submit">
-            Explore!
+        <Container>
+          {this.state.error ? // build Error component and insert here
+            <h3>{this.state.error}</h3> : ''}
+          <h1>City Explorer</h1>
+          <Form onSubmit={this.handleFormSubmit}>
+            <Form.Group controlId="City">
+              <Form.Label>City name</Form.Label>
+              <Form.Control value={this.state.city} onInput={e => this.setState({ city: e.target.value })}></Form.Control>
+            </Form.Group>
+            <Button variant="primary" type="submit">
+              Explore!
           </Button>
-        </Form>
-        {this.state.error ? <h3>{this.state.error}</h3> : ''}
-        {this.state.cityData.lat === undefined ?
-          <>
-            <Jumbotron>
-              <h3>{this.state.cityName}</h3>
-              <h6>{this.state.lat} {this.state.lon}</h6>
-              <img src={`https://maps.locationiq.com/v3/staticmap?key=${process.env.REACT_APP_LOCATIONIQ_ACCESSKEY}&center=${this.state.lat},${this.state.lon}&zoom=10`} alt={`Map of ${this.state.cityName}`} />
-            </Jumbotron>
-            <Weather weatherData={this.state.weatherData}/>
-            {console.log(this.state.cityTarget)}
-          </>
-          : console.log(`dang`)}
+          </Form>
+          {this.state.cityData.lat === undefined ?
+            <>
+              <Jumbotron>
+                <h3>{this.state.cityName}</h3>
+                <h6>{this.state.lat} {this.state.lon}</h6>
+                <img src={`https://maps.locationiq.com/v3/staticmap?key=${process.env.REACT_APP_LOCATIONIQ_ACCESSKEY}&center=${this.state.lat},${this.state.lon}&zoom=10`} alt={`Map of ${this.state.cityName}`} />
+              </Jumbotron>
+              <Weather weatherData={this.state.weatherData} />
+            </>
+            : console.log(`dang`)}
+        </Container>
       </>
     );
   }

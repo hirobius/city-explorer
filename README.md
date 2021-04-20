@@ -25,9 +25,9 @@ An simple web app / tool where the user inputs a city name and is served
 
 ## Time Estimates
 
-Name of feature: ______________Card 1__________________
+Name of feature: _________Lab 8: Card 1__________________
 
-Estimate of time needed to complete: __6hr___
+Estimate of time needed to complete: __3hr___
 
 Start time: _____
 

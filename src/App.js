@@ -15,7 +15,7 @@ class App extends React.Component {
       city: '',
       cityData: {},
       weatherData: [],
-      // cityTarget: []
+      searchedYet: false
     };
   }
 
@@ -25,11 +25,13 @@ class App extends React.Component {
       let cityData = await axios.get(`https://us1.locationiq.com/v1/search.php?key=${process.env.REACT_APP_LOCATIONIQ_ACCESSKEY}&q=${this.state.city}&format=json`);
       let cityTarget = cityData.data[0];
       this.setState({
-        cityName: cityData.data[0].display_name,
+        cityName: cityTarget.display_name,
         lat: cityTarget.lat,
         lon: cityTarget.lon,
+        searchedYet: true
       });
-      this.getWeatherData(cityTarget.lat, cityTarget.lon);
+      this.getWeatherData();
+      this.getMovieData();
       // console.log(this.state);
     } catch (err) {
       console.log(err);
@@ -55,10 +57,29 @@ class App extends React.Component {
     }
   }
 
+  getMovieData = async () => {
+    try {
+      let movieData = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/movies`, {
+        params: {
+          cityName: this.state.city,
+        }
+      });
+      console.log(movieData.data);
+      this.setState({
+        movieData: movieData.data
+      })
+    } catch (err) {
+      console.log(`error found!!! ${err.message}`);
+      this.setState({ error: `${err.message}: ${err.message.data}` });
+    }
+  }
+
   render() {
 
     return (
       <>
+      {/* fill the next ternary to clean up empty box problems */}
+        {this.state.searchedYet ? '' : ''}
         <Container>
           {this.state.error ? // build Error component and insert here
             <h3>{this.state.error}</h3> : ''}
@@ -80,6 +101,7 @@ class App extends React.Component {
                 <img src={`https://maps.locationiq.com/v3/staticmap?key=${process.env.REACT_APP_LOCATIONIQ_ACCESSKEY}&center=${this.state.lat},${this.state.lon}&zoom=10`} alt={`Map of ${this.state.cityName}`} />
               </Jumbotron>
               <Weather weatherData={this.state.weatherData} />
+              {/* <Movie movieData={this.state.movieData} /> */}
             </>
             : console.log(`dang`)}
         </Container>

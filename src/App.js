@@ -3,8 +3,9 @@ import axios from 'axios';
 import './App.css';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-import Jumbotron from 'react-bootstrap/Jumbotron'
+import Jumbotron from 'react-bootstrap/Jumbotron';
 import Weather from './Weather';
+import Movie from './Movie';
 import Container from 'react-bootstrap/Container';
 
 class App extends React.Component {
@@ -15,6 +16,7 @@ class App extends React.Component {
       city: '',
       cityData: {},
       weatherData: [],
+      movieData: [],
       searchedYet: false
     };
   }
@@ -32,7 +34,7 @@ class App extends React.Component {
       });
       this.getWeatherData();
       this.getMovieData();
-      // console.log(this.state);
+      console.log(this.state);
     } catch (err) {
       console.log(err);
       this.setState({ error: `${err.message}: ${err.message.data}` });
@@ -64,7 +66,7 @@ class App extends React.Component {
           cityName: this.state.city,
         }
       });
-      console.log(movieData.data);
+      console.log(this.state.city);
       this.setState({
         movieData: movieData.data
       })
@@ -75,10 +77,10 @@ class App extends React.Component {
   }
 
   render() {
-
+    console.log(this.state.movieData);
     return (
       <>
-      {/* fill the next ternary to clean up empty box problems */}
+        {/* fill the next ternary to clean up empty box problems */}
         {this.state.searchedYet ? '' : ''}
         <Container>
           {this.state.error ? // build Error component and insert here
@@ -101,7 +103,7 @@ class App extends React.Component {
                 <img src={`https://maps.locationiq.com/v3/staticmap?key=${process.env.REACT_APP_LOCATIONIQ_ACCESSKEY}&center=${this.state.lat},${this.state.lon}&zoom=10`} alt={`Map of ${this.state.cityName}`} />
               </Jumbotron>
               <Weather weatherData={this.state.weatherData} />
-              {/* <Movie movieData={this.state.movieData} /> */}
+              <Movie movieData={this.state.movieData} />
             </>
             : console.log(`dang`)}
         </Container>

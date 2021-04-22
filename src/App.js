@@ -7,6 +7,7 @@ import Jumbotron from 'react-bootstrap/Jumbotron';
 import Weather from './Weather';
 import Movies from './Movies';
 import Container from 'react-bootstrap/Container';
+import Error from './Error';
 
 class App extends React.Component {
   constructor(props) {
@@ -80,10 +81,9 @@ class App extends React.Component {
     console.log(this.state.movieData);
     return (
       <>
-        {this.state.searchedYet ? '' : ''}
+        {/* {this.state.searchedYet ? '' : ''} */}
         <Container>
-          {this.state.error ? // build Error component and insert here
-            <h3>{this.state.error}</h3> : ''}
+          {this.state.error ? <Error error={this.state.error}/> : ''}
           <h1>City Explorer</h1>
           <Form onSubmit={this.handleFormSubmit}>
             <Form.Group controlId="City">

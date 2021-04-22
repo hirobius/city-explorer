@@ -5,7 +5,7 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Jumbotron from 'react-bootstrap/Jumbotron';
 import Weather from './Weather';
-import Movie from './Movie';
+import Movies from './Movies';
 import Container from 'react-bootstrap/Container';
 
 class App extends React.Component {
@@ -103,7 +103,7 @@ class App extends React.Component {
                 <img src={`https://maps.locationiq.com/v3/staticmap?key=${process.env.REACT_APP_LOCATIONIQ_ACCESSKEY}&center=${this.state.lat},${this.state.lon}&zoom=10`} alt={`Map of ${this.state.cityName}`} />
               </Jumbotron>
               <Weather weatherData={this.state.weatherData} />
-              <Movie movieData={this.state.movieData} />
+              <Movies movieData={this.state.movieData} />
             </>
             : console.log(`dang`)}
         </Container>

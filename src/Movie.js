@@ -9,12 +9,26 @@ class Movie extends React.Component {
   }
 
   render() {
-    let movieList = this.props.movieData.map((movie, index) =>
-      <ListGroup.Item key={index}>Description: {movie.title}, Date: {movie.overview}</ListGroup.Item>);
+    // Need images
+    // Also need to convert to Cards: https://getbootstrap.com/docs/4.0/components/card/
     return (
       <>
         <ListGroup>
-          {movieList}
+          <ListGroup.Item>
+            Title: {this.props.movie.title}
+          </ListGroup.Item>
+          <ListGroup.Item>
+            Overview: {this.props.movie.overview}
+          </ListGroup.Item>
+          <ListGroup.Item>
+            Average Votes: {this.props.movie.average_votes}
+          </ListGroup.Item>
+          <ListGroup.Item>
+            Popularity: {this.props.movie.popularity}
+          </ListGroup.Item>
+          <ListGroup.Item>
+            Released on: {this.props.movie.released_on}
+          </ListGroup.Item>
         </ListGroup>
       </>
     );

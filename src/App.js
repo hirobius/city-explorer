@@ -35,7 +35,7 @@ class App extends React.Component {
       });
       this.getWeatherData();
       this.getMovieData();
-      console.log(this.state);
+      // console.log(this.state);
     } catch (err) {
       console.log(err);
       this.setState({ error: `${err.message}: ${err.message.data}` });

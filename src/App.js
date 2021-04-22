@@ -80,7 +80,6 @@ class App extends React.Component {
     console.log(this.state.movieData);
     return (
       <>
-        {/* fill the next ternary to clean up empty box problems */}
         {this.state.searchedYet ? '' : ''}
         <Container>
           {this.state.error ? // build Error component and insert here

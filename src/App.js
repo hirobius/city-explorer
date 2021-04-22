@@ -5,8 +5,9 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Jumbotron from 'react-bootstrap/Jumbotron';
 import Weather from './Weather';
-import Movie from './Movie';
+import Movies from './Movies';
 import Container from 'react-bootstrap/Container';
+import Error from './Error';
 
 class App extends React.Component {
   constructor(props) {
@@ -34,7 +35,7 @@ class App extends React.Component {
       });
       this.getWeatherData();
       this.getMovieData();
-      console.log(this.state);
+      // console.log(this.state);
     } catch (err) {
       console.log(err);
       this.setState({ error: `${err.message}: ${err.message.data}` });
@@ -80,11 +81,9 @@ class App extends React.Component {
     console.log(this.state.movieData);
     return (
       <>
-        {/* fill the next ternary to clean up empty box problems */}
-        {this.state.searchedYet ? '' : ''}
+        {/* {this.state.searchedYet ? '' : ''} */}
         <Container>
-          {this.state.error ? // build Error component and insert here
-            <h3>{this.state.error}</h3> : ''}
+          {this.state.error ? <Error error={this.state.error}/> : ''}
           <h1>City Explorer</h1>
           <Form onSubmit={this.handleFormSubmit}>
             <Form.Group controlId="City">
@@ -103,7 +102,7 @@ class App extends React.Component {
                 <img src={`https://maps.locationiq.com/v3/staticmap?key=${process.env.REACT_APP_LOCATIONIQ_ACCESSKEY}&center=${this.state.lat},${this.state.lon}&zoom=10`} alt={`Map of ${this.state.cityName}`} />
               </Jumbotron>
               <Weather weatherData={this.state.weatherData} />
-              <Movie movieData={this.state.movieData} />
+              <Movies movieData={this.state.movieData} />
             </>
             : console.log(`dang`)}
         </Container>
